@@ -15,10 +15,11 @@ import { StockChart } from "../Home/StockChart";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchCoinDetails } from "@/State/Coin/Action";
-
+import { addItemToWatchList, getUserWatchList } from "@/State/WatchList/Action";
+import { existInWatchlist } from "@/utils/existInWatchlist";
 export const StockDetails = () => {
   const dispatch = useDispatch();
-  const { coin } = useSelector((store) => store);
+  const { coin, watchlist } = useSelector((store) => store);
   const params = useParams();
 
   // console.log("yha to hai kya", params.id);
@@ -27,7 +28,22 @@ export const StockDetails = () => {
     dispatch(
       fetchCoinDetails({ coinId: params.id, jwt: localStorage.getItem("jwt") })
     );
+    dispatch(getUserWatchList({ jwt: localStorage.getItem("jwt") }));
   }, [params.id]);
+
+  const handleAddWatchList = () => {
+    dispatch(
+      addItemToWatchList({
+        coinId: coin?.coinDetails?.id,
+        jwt: localStorage.getItem("jwt"),
+      })
+    );
+  };
+
+  console.log(
+    "hjihfwjifhjfhnjkfhsjhfksjfkfsj",
+    existInWatchlist(watchlist.items, coin.coinDetails)
+  );
 
   console.log("image ", coin?.coinDetails);
   return (
@@ -67,8 +83,8 @@ export const StockDetails = () => {
           </div>
         </div>
         <div className=" flex items-center gap-4">
-          <Button>
-            {true ? (
+          <Button onClick={handleAddWatchList}>
+            {existInWatchlist(watchlist.items, coin.coinDetails) ? (
               <BookmarkFilledIcon className="h-6 w-6" />
             ) : (
               <BookmarkIcon className=" h-6 w-6" />

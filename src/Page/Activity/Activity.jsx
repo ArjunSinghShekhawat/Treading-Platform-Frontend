@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -8,8 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { Button } from "@/components/ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrderForUser } from "@/State/Order/Action";
+import { calculateProfit } from "@/utils/calculateProfit";
 export const Activity = () => {
+  const dispatch = useDispatch();
+  const { order } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(getAllOrderForUser({ jwt: localStorage.getItem("jwt") }));
+  }, []);
+
   return (
     <div className=" p-5 l:p-20">
       <h1 className=" font-bold text-3xl pb-5">Activity</h1>
@@ -26,7 +35,7 @@ export const Activity = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {[1, 1, 1, 1, 1, 1, 1].map((item, index) => (
+          {order.orders.map((item, index) => (
             <TableRow key={index}>
               <TableCell>
                 <p>2024/05/31 </p>
@@ -35,17 +44,17 @@ export const Activity = () => {
               <TableCell className="font-medium flex items-center gap-2">
                 <Avatar className="-z-50">
                   <AvatarImage
-                    src="https://cdn.pixabay.com/photo/2021/04/30/16/47/binance-logo-6219389_1280.png"
+                    src={item?.orderItem?.coin?.image}
                     className=" rounded-full w-10"
                   />
                 </Avatar>
-                <span>Bitcoin</span>
+                <span>{item?.orderItem?.coin?.name.toUpperCase()}</span>
               </TableCell>
-              <TableCell>BTC</TableCell>
-              <TableCell>456987123</TableCell>
-              <TableCell>456987123</TableCell>
-              <TableCell>456987123</TableCell>
-              <TableCell className="text-right">456987145555783</TableCell>
+              <TableCell>{item?.orderItem?.buyPrice}</TableCell>
+              <TableCell>{item?.orderItem?.sellPrice}</TableCell>
+              <TableCell>{item.orderType}</TableCell>
+              <TableCell>{calculateProfit(item)}</TableCell>
+              <TableCell className="text-right">{item.price}</TableCell>
             </TableRow>
           ))}
         </TableBody>

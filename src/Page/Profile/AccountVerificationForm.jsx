@@ -14,9 +14,11 @@ import {
   InputOTPGroup,
   InputOTP,
 } from "@/components/ui/input-otp";
+import { useSelector } from "react-redux";
 
 export const AccountVerificationForm = () => {
   const [value, setValue] = useState("");
+  const { auth } = useSelector((store) => store);
 
   // Update handleChange to properly update the state
   const handleChange = (newValue) => {
@@ -32,7 +34,7 @@ export const AccountVerificationForm = () => {
       <div className=" space-y-5 mt-10 w-full">
         <div className=" flex justify-between items-center">
           <p>Email :</p>
-          <p>arjun@gmail.com</p>
+          <p>{auth.user?.email}</p>
 
           <Dialog>
             <DialogTrigger>

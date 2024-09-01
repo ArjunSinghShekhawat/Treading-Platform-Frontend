@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -10,10 +10,27 @@ import {
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToWatchList, getUserWatchList } from "@/State/WatchList/Action";
+import { existInWatchlist } from "@/utils/existInWatchlist";
 export const WatchList = () => {
+  const { watchlist } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserWatchList({ jwt: localStorage.getItem("jwt") }));
+  }, []);
+
   const handleRemoveToWatchList = (value) => {
-    console.log(value);
+    dispatch(
+      addItemToWatchList({
+        coinId: value,
+        jwt: localStorage.getItem("jwt"),
+      })
+    );
   };
+  console.log("hhhhhhhhhhhhhhhhhhhhhhhhh", watchlist);
+
   return (
     <div className=" p-5 l:p-20">
       <h1 className=" font-bold text-3xl pb-5">WatchList</h1>
@@ -30,22 +47,22 @@ export const WatchList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {[1, 1, 1, 1, 1, 1, 1].map((item, index) => (
-            <TableRow key={index}>
+          {watchlist.items.map((item) => (
+            <TableRow key={item.id}>
               <TableCell className="font-medium flex items-center gap-2">
                 <Avatar className="-z-50">
                   <AvatarImage
-                    src="https://cdn.pixabay.com/photo/2021/04/30/16/47/binance-logo-6219389_1280.png"
+                    src={item.image}
                     className=" rounded-full w-10"
                   />
                 </Avatar>
-                <span>Bitcoin</span>
+                <span>{item.name}</span>
               </TableCell>
-              <TableCell>BTC</TableCell>
-              <TableCell>456987123</TableCell>
-              <TableCell>456987145555783</TableCell>
-              <TableCell>-2.34%</TableCell>
-              <TableCell className="">$250.00</TableCell>
+              <TableCell>{item.symbol.toUpperCase()}</TableCell>
+              <TableCell>{item.total_volume}</TableCell>
+              <TableCell>{item.market_cap}</TableCell>
+              <TableCell>{item.price_change_percentage_24h}</TableCell>
+              <TableCell className="">${item.current_price}</TableCell>
               <TableCell className="text-right">
                 <Button
                   variant="ghost"

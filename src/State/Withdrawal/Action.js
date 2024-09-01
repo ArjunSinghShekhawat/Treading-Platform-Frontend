@@ -171,6 +171,8 @@ export const getPaymentDetails =
   async (dispatch) => {
     dispatch({ type: GET_PAYMENTDETAILS_REQUEST });
 
+    console.log("jwtttttt", jwt);
+
     try {
       const responce = await axios.get(
         `http://localhost:8080/api/payment-details`,
@@ -185,7 +187,7 @@ export const getPaymentDetails =
         type: GET_PAYMENTDETAILS_SUCCESS,
         payload: responce.data,
       });
-      console.log("get paymenbt details ------", responce.data);
+      console.log("get paymenbt details of of of of of  ------", responce.data);
     } catch (error) {
       console.log("error", error);
       dispatch({

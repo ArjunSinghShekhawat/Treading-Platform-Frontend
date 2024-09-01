@@ -68,19 +68,15 @@ export const getAllOrderForUser =
     dispatch({ type: GET_ALL_ORDER_REQUEST });
 
     try {
-      const responce = await axios.get(
-        `http://localhost:8080/api/orders`,
-        orderData,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}}`,
-          },
-          params: {
-            orderType: orderType,
-            assetSymbol: assetSymbol,
-          },
-        }
-      );
+      const responce = await axios.get(`http://localhost:8080/api/orders`, {
+        headers: {
+          Authorization: `Bearer ${jwt}}`,
+        },
+        params: {
+          order_type: orderType,
+          asset_symbol: assetSymbol,
+        },
+      });
       dispatch({ type: GET_ALL_ORDER_SUCCESS, payload: responce.data });
       console.log("get All orders", responce.data);
     } catch (error) {
