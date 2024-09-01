@@ -15,7 +15,7 @@ import {
 export const register = (userData) => async (dispatch) => {
   dispatch({ type: REGISTER_REQUEST });
 
-  const baseUrl = "http://localhost:8080";
+  const baseUrl = "https://treading-backend.netlify.app";
 
   try {
     const responce = await axios.post(`${baseUrl}/auth/signup`, userData);
@@ -34,7 +34,7 @@ export const register = (userData) => async (dispatch) => {
 export const login = (userData) => async (dispatch) => {
   dispatch({ type: LOGIN_REQUEST });
 
-  const baseUrl = "http://localhost:8080";
+  const baseUrl = "https://treading-backend.netlify.app";
 
   try {
     const responce = await axios.post(`${baseUrl}/auth/login`, userData.data);
@@ -54,7 +54,7 @@ export const login = (userData) => async (dispatch) => {
 export const getUser = (jwt) => async (dispatch) => {
   dispatch({ type: GET_USER_REQUEST });
 
-  const baseUrl = "http://localhost:8080";
+  const baseUrl = "https://treading-backend.netlify.app";
 
   try {
     const responce = await axios.get(`${baseUrl}/api/users/profile`, {
